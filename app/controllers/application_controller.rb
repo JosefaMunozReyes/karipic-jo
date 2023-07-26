@@ -8,4 +8,10 @@ class ApplicationController < ActionController::Base
         devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :photo, images_attributes: [:url, :contex, :id]])
         devise_parameter_sanitizer.permit(:account_update, keys: [:name, :photo, images_attributes: [:url, :contex, :id]])
     end
+
+    def authorize_request(kind = nil)
+        unless kind.include?(current_user.role)
+            redirect_to publications_path, notice: "You are not authorized to perform this action"
+        end
+    end
 end
